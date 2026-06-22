@@ -23,4 +23,24 @@ const complainList = async (req, res) => {
     }
 };
 
-module.exports = { complainCreate, complainList };
+const updateComplain = async (req, res) => {
+    try {
+        const result = await Complain.findByIdAndUpdate(req.params.id,
+            { $set: req.body },
+            { new: true })
+        res.send(result)
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+const deleteComplain = async (req, res) => {
+    try {
+        const result = await Complain.findByIdAndDelete(req.params.id)
+        res.send(result)
+    } catch (error) {
+        res.status(500).json(error);
+    }
+}
+
+module.exports = { complainCreate, complainList, updateComplain, deleteComplain };

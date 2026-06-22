@@ -102,4 +102,16 @@ const deleteSclasses = async (req, res) => {
 }
 
 
-module.exports = { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents };
+const updateSclass = async (req, res) => {
+    try {
+        const result = await Sclass.findByIdAndUpdate(req.params.id,
+            { $set: req.body },
+            { new: true }
+        );
+        res.send(result);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+module.exports = { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents, updateSclass };

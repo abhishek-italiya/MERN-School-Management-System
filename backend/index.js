@@ -26,6 +26,7 @@ mongoose
 
 app.use('/', Routes);
 
+// Trigger reload
 app.listen(PORT, () => {
     console.log(`Server started at port no. ${PORT}`)
 })

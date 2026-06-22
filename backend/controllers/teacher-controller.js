@@ -105,10 +105,12 @@ const deleteTeacher = async (req, res) => {
     try {
         const deletedTeacher = await Teacher.findByIdAndDelete(req.params.id);
 
-        await Subject.updateOne(
-            { teacher: deletedTeacher._id, teacher: { $exists: true } },
-            { $unset: { teacher: 1 } }
-        );
+        if (deletedTeacher) {
+            await Subject.updateMany(
+                { teacher: deletedTeacher._id },
+                { $unset: { teacher: "" } }
+            );
+        }
 
         res.send(deletedTeacher);
     } catch (error) {
@@ -192,6 +194,22 @@ const teacherAttendance = async (req, res) => {
     }
 };
 
+const updateTeacher = async (req, res) => {
+    try {
+        if (req.body.password) {
+            const salt = await bcrypt.genSalt(10);
+            req.body.password = await bcrypt.hash(req.body.password, salt);
+        }
+        const result = await Teacher.findByIdAndUpdate(req.params.id,
+            { $set: req.body },
+            { new: true }
+        );
+        res.send(result);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
 module.exports = {
     teacherRegister,
     teacherLogIn,
@@ -201,5 +219,6 @@ module.exports = {
     deleteTeacher,
     deleteTeachers,
     deleteTeachersByClass,
-    teacherAttendance
+    teacherAttendance,
+    updateTeacher
 };
