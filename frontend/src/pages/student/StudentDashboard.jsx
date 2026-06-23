@@ -21,8 +21,8 @@ import ViewStdAttendance from './ViewStdAttendance';
 import StudentComplain from './StudentComplain';
 import StudentComplaints from './StudentComplaints';
 import Logout from '../Logout'
-import AccountMenu from '../../components/AccountMenu';
 import { AppBar, Drawer } from '../../components/styles';
+import AccountMenu from '../../components/AccountMenu';
 
 const StudentDashboard = () => {
     const [open, setOpen] = useState(() => {

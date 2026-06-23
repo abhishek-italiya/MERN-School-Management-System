@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Teacher = require('../models/teacherSchema.js');
 const Subject = require('../models/subjectSchema.js');
 
@@ -19,7 +20,12 @@ const teacherRegister = async (req, res) => {
             let result = await teacher.save();
             await Subject.findByIdAndUpdate(teachSubject, { teacher: teacher._id });
             result.password = undefined;
-            res.send(result);
+            const token = jwt.sign(
+                { id: result._id, role: 'Teacher', school: result.school },
+                process.env.JWT_SECRET || 'fallback_secret',
+                { expiresIn: '24h' }
+            );
+            res.send({ user: result, token });
         }
     } catch (err) {
         res.status(500).json(err);
@@ -36,7 +42,12 @@ const teacherLogIn = async (req, res) => {
                 teacher = await teacher.populate("school", "schoolName")
                 teacher = await teacher.populate("teachSclass", "sclassName")
                 teacher.password = undefined;
-                res.send(teacher);
+                const token = jwt.sign(
+                    { id: teacher._id, role: 'Teacher', school: teacher.school?._id || teacher.school },
+                    process.env.JWT_SECRET || 'fallback_secret',
+                    { expiresIn: '24h' }
+                );
+                res.send({ user: teacher, token });
             } else {
                 res.send({ message: "Invalid password" });
             }

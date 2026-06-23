@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Admin = require('../models/adminSchema.js');
 const Sclass = require('../models/sclassSchema.js');
 const Student = require('../models/studentSchema.js');
@@ -57,8 +58,12 @@ const Complain = require('../models/complainSchema.js');
 
 const adminRegister = async (req, res) => {
     try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(req.body.password, salt);
+
         const admin = new Admin({
-            ...req.body
+            ...req.body,
+            password: hashedPass
         });
 
         const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
@@ -73,7 +78,12 @@ const adminRegister = async (req, res) => {
         else {
             let result = await admin.save();
             result.password = undefined;
-            res.send(result);
+            const token = jwt.sign(
+                { id: result._id, role: 'Admin', school: result._id },
+                process.env.JWT_SECRET || 'fallback_secret',
+                { expiresIn: '24h' }
+            );
+            res.send({ user: result, token });
         }
     } catch (err) {
         res.status(500).json(err);
@@ -84,9 +94,15 @@ const adminLogIn = async (req, res) => {
     if (req.body.email && req.body.password) {
         let admin = await Admin.findOne({ email: req.body.email });
         if (admin) {
-            if (req.body.password === admin.password) {
+            const validated = await bcrypt.compare(req.body.password, admin.password);
+            if (validated) {
                 admin.password = undefined;
-                res.send(admin);
+                const token = jwt.sign(
+                    { id: admin._id, role: 'Admin', school: admin._id },
+                    process.env.JWT_SECRET || 'fallback_secret',
+                    { expiresIn: '24h' }
+                );
+                res.send({ user: admin, token });
             } else {
                 res.send({ message: "Invalid password" });
             }

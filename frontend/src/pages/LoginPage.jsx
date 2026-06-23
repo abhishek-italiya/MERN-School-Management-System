@@ -98,7 +98,7 @@ const LoginPage = ({ role }) => {
         <PageContainer>
             <GlassCard>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 2 }}>
-                    <SchoolIcon sx={{ color: '#7f56da', fontSize: 40, mr: 1 }} />
+                    <SchoolIcon sx={{ color: '#4F46E5', fontSize: 40, mr: 1 }} />
                     <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: 'Poppins', letterSpacing: '-0.5px' }}>
                         <GradientText>School</GradientText>Sync
                     </Typography>
@@ -181,7 +181,7 @@ const LoginPage = ({ role }) => {
                     
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1, mb: 2 }}>
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" sx={{ '&.Mui-checked': { color: '#7f56da' } }} />}
+                            control={<Checkbox value="remember" color="primary" sx={{ '&.Mui-checked': { color: '#4F46E5' } }} />}
                             label={<Typography variant="body2" sx={{ fontFamily: 'Poppins' }}>Remember me</Typography>}
                         />
                         <StyledLink to="/forgot-password">
@@ -202,6 +202,14 @@ const LoginPage = ({ role }) => {
                         <Typography variant="body2" sx={{ textAlign: 'center', fontFamily: 'Poppins' }}>
                             Don't have an account?{' '}
                             <StyledLink to="/Adminregister" style={{ fontWeight: 600 }}>
+                                Sign up
+                            </StyledLink>
+                        </Typography>
+                    )}
+                    {role === "Parent" && (
+                        <Typography variant="body2" sx={{ textAlign: 'center', fontFamily: 'Poppins' }}>
+                            Don't have an account?{' '}
+                            <StyledLink to="/Parentregister" style={{ fontWeight: 600 }}>
                                 Sign up
                             </StyledLink>
                         </Typography>
@@ -242,7 +250,7 @@ const PageContainer = styled.div`
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(-45deg, #f3e5f5, #e1bee7, #ce93d8, #ba68c8);
+  background: linear-gradient(-45deg, #EEF2FF, #E0E7FF, #C7D2FE, #818CF8);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
 `;
@@ -265,31 +273,31 @@ const GlassCard = styled.div`
 `;
 
 const GradientText = styled.span`
-  background: -webkit-linear-gradient(45deg, #7f56da, #e73c7e);
+  background: -webkit-linear-gradient(45deg, #4F46E5, #7C3AED);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #7f56da;
+  color: #4F46E5;
   font-family: 'Poppins', sans-serif;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   &:hover {
-    color: #e73c7e;
+    color: #7C3AED;
   }
 `;
 
 const StyledTextLink = styled.span`
   text-decoration: none;
-  color: #7f56da;
+  color: #4F46E5;
   font-family: 'Poppins', sans-serif;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   cursor: pointer;
   &:hover {
-    color: #e73c7e;
+    color: #7C3AED;
   }
 `;
 
@@ -299,7 +307,7 @@ const StyledTextField = styled(TextField)`
       border-radius: 12px;
     }
     &.Mui-focused fieldset {
-      border-color: #7f56da;
+      border-color: #4F46E5;
     }
   }
 `;

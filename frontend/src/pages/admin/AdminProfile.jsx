@@ -8,6 +8,7 @@ import { Button, Collapse, Card, CardContent, Typography, Grid, TextField, Box, 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailIcon from '@mui/icons-material/Email';
 import SchoolIcon from '@mui/icons-material/School';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import styled from 'styled-components';
 
 const AdminProfile = () => {
@@ -102,6 +103,17 @@ const AdminProfile = () => {
                                 <Box>
                                     <Typography variant="body2" sx={{ color: '#888', fontFamily: 'Poppins' }}>School Name</Typography>
                                     <Typography variant="body1" sx={{ fontWeight: 600, color: '#252525', fontFamily: 'Poppins' }}>{currentUser.schoolName}</Typography>
+                                </Box>
+                            </InfoBox>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InfoBox>
+                                <IconWrapper>
+                                    <VpnKeyIcon sx={{ color: '#10B981' }} />
+                                </IconWrapper>
+                                <Box>
+                                    <Typography variant="body2" sx={{ color: '#888', fontFamily: 'Poppins' }}>School Admin ID (Share with Parents)</Typography>
+                                    <Typography variant="body1" sx={{ fontWeight: 600, color: '#4F46E5', fontFamily: 'Poppins', letterSpacing: '0.5px' }}>{currentUser._id}</Typography>
                                 </Box>
                             </InfoBox>
                         </Grid>

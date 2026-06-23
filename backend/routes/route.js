@@ -25,6 +25,14 @@ const {
 const { subjectCreate, freeSubjectList, classSubjects, deleteSubjectsByClass, getSubjectDetail, deleteSubject, deleteSubjects, allSubjects, updateSubject } = require('../controllers/subject-controller.js');
 const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherSubject, teacherAttendance, updateTeacher } = require('../controllers/teacher-controller.js');
 
+const { parentRegister, parentLogIn, getParentDetail } = require('../controllers/parent-controller.js');
+const { createFeeRecord, getStudentFees, getSchoolFees, processPaymentMock } = require('../controllers/fee-controller.js');
+const { createExam, getExamsByClass, getExamsBySchool, generateReportCard } = require('../controllers/exam-controller.js');
+const { createTimetable, getTimetableByClass, getTimetableByTeacher, getTimetableSuggestions } = require('../controllers/timetable-controller.js');
+const { createAssignment, getAssignmentsByClass, getAssignmentsByTeacher, submitAssignment, gradeSubmission } = require('../controllers/assignment-controller.js');
+const { predictAttendance, predictResults, getAcademicRecommendations } = require('../controllers/ai-controller.js');
+
+
 // Admin
 router.post('/AdminReg', adminRegister);
 router.post('/AdminLogin', adminLogIn);
@@ -121,5 +129,40 @@ router.delete("/Subject/:id", deleteSubject)
 router.put("/Subject/:id", updateSubject)
 router.delete("/Subjects/:id", deleteSubjects)
 router.delete("/SubjectsClass/:id", deleteSubjectsByClass)
+
+// Parent
+router.post('/ParentReg', parentRegister);
+router.post('/ParentLogin', parentLogIn);
+router.get('/Parent/:id', getParentDetail);
+
+// Fees
+router.post('/FeeCreate', createFeeRecord);
+router.get('/StudentFees/:studentId', getStudentFees);
+router.get('/SchoolFees/:schoolId', getSchoolFees);
+router.post('/FeePayment', processPaymentMock);
+
+// Exams
+router.post('/ExamCreate', createExam);
+router.get('/ClassExams/:classId', getExamsByClass);
+router.get('/SchoolExams/:schoolId', getExamsBySchool);
+router.get('/StudentReportCard/:studentId', generateReportCard);
+
+// Timetable
+router.post('/TimetableCreate', createTimetable);
+router.get('/ClassTimetable/:classId', getTimetableByClass);
+router.get('/TeacherTimetable/:teacherId', getTimetableByTeacher);
+router.post('/TimetableSuggestions', getTimetableSuggestions);
+
+// Assignments
+router.post('/AssignmentCreate', createAssignment);
+router.get('/ClassAssignments/:classId', getAssignmentsByClass);
+router.get('/TeacherAssignments/:teacherId', getAssignmentsByTeacher);
+router.post('/AssignmentSubmit', submitAssignment);
+router.post('/AssignmentGrade', gradeSubmission);
+
+// AI Features
+router.post('/AiPredictAttendance', predictAttendance);
+router.post('/AiPredictResults', predictResults);
+router.post('/AiRecommendations', getAcademicRecommendations);
 
 module.exports = router;

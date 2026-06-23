@@ -8,7 +8,7 @@ import {
   Backdrop,
   Typography
 } from '@mui/material';
-import { AccountCircle, School, Group } from '@mui/icons-material';
+import { AccountCircle, School, Group, SupervisorAccount } from '@mui/icons-material';
 import styled, { keyframes } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/userRelated/userHandle';
@@ -62,6 +62,18 @@ const ChooseUser = ({ visitor }) => {
         navigate('/Teacherlogin');
       }
     }
+
+    else if (user === "Parent") {
+      if (visitor === "guest") {
+        const email = "parent@12"
+        const fields = { email, password }
+        setLoader(true)
+        dispatch(loginUser(fields, user))
+      }
+      else {
+        navigate('/Parentlogin');
+      }
+    }
   }
 
   useEffect(() => {
@@ -73,6 +85,8 @@ const ChooseUser = ({ visitor }) => {
         navigate('/Student/dashboard');
       } else if (currentRole === 'Teacher') {
         navigate('/Teacher/dashboard');
+      } else if (currentRole === 'Parent') {
+        navigate('/Parent/dashboard');
       }
     }
     else if (status === 'error') {
@@ -84,52 +98,67 @@ const ChooseUser = ({ visitor }) => {
 
   return (
     <PageContainer>
-      <Container>
-        <Typography variant="h3" sx={{ textAlign: 'center', mb: 6, fontWeight: 700, fontFamily: 'Poppins', color: '#252525' }}>
+      <Container maxWidth="lg">
+        <Typography variant="h3" sx={{ textAlign: 'center', mb: 6, fontWeight: 800, fontFamily: 'Poppins', color: '#1E293B' }}>
           Choose Your Role
         </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={6} md={4}>
+        <Grid container spacing={3} justifyContent="center">
+          <Grid item xs={12} sm={6} md={3}>
             <div onClick={() => navigateHandler("Admin")} style={{ height: '100%' }}>
               <GlassCard>
-                <IconWrapper>
-                  <AccountCircle sx={{ fontSize: 60, color: '#7f56da' }} />
+                <IconWrapper style={{ backgroundColor: 'rgba(79, 70, 229, 0.1)' }}>
+                  <AccountCircle sx={{ fontSize: 60, color: '#4F46E5' }} />
                 </IconWrapper>
-                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#252525' }}>
+                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#1E293B' }}>
                   Admin
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#555', lineHeight: 1.6 }}>
-                  Login as an administrator to access the dashboard to manage app data.
+                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#64748B', lineHeight: 1.6 }}>
+                  Access management tools for students, classes, and subjects.
                 </Typography>
               </GlassCard>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <div onClick={() => navigateHandler("Student")} style={{ height: '100%' }}>
               <GlassCard>
-                <IconWrapper>
-                  <School sx={{ fontSize: 60, color: '#e73c7e' }} />
+                <IconWrapper style={{ backgroundColor: 'rgba(124, 58, 237, 0.1)' }}>
+                  <School sx={{ fontSize: 60, color: '#7C3AED' }} />
                 </IconWrapper>
-                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#252525' }}>
+                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#1E293B' }}>
                   Student
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#555', lineHeight: 1.6 }}>
-                  Login as a student to explore course materials and assignments.
+                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#64748B', lineHeight: 1.6 }}>
+                  View timetables, course assignments, and academic tracking.
                 </Typography>
               </GlassCard>
             </div>
           </Grid>
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <div onClick={() => navigateHandler("Teacher")} style={{ height: '100%' }}>
               <GlassCard>
-                <IconWrapper>
-                  <Group sx={{ fontSize: 60, color: '#23a6d5' }} />
+                <IconWrapper style={{ backgroundColor: 'rgba(6, 182, 212, 0.1)' }}>
+                  <Group sx={{ fontSize: 60, color: '#06B6D4' }} />
                 </IconWrapper>
-                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#252525' }}>
+                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#1E293B' }}>
                   Teacher
                 </Typography>
-                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#555', lineHeight: 1.6 }}>
-                  Login as a teacher to create courses, assignments, and track student progress.
+                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#64748B', lineHeight: 1.6 }}>
+                  Record attendance, grade assignments, and track class grades.
+                </Typography>
+              </GlassCard>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <div onClick={() => navigateHandler("Parent")} style={{ height: '100%' }}>
+              <GlassCard>
+                <IconWrapper style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}>
+                  <SupervisorAccount sx={{ fontSize: 60, color: '#10B981' }} />
+                </IconWrapper>
+                <Typography variant="h5" sx={{ fontFamily: 'Poppins', fontWeight: 600, mb: 1, color: '#1E293B' }}>
+                  Parent
+                </Typography>
+                <Typography variant="body2" sx={{ fontFamily: 'Poppins', color: '#64748B', lineHeight: 1.6 }}>
+                  Monitor children's attendance, due fee lists, and report cards.
                 </Typography>
               </GlassCard>
             </div>
@@ -163,32 +192,32 @@ const PageContainer = styled.div`
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: linear-gradient(-45deg, #f3e5f5, #e1bee7, #ce93d8, #ba68c8);
+  background: linear-gradient(-45deg, #EEF2FF, #E0E7FF, #C7D2FE, #EEF2FF);
   background-size: 400% 400%;
   animation: ${gradientAnimation} 15s ease infinite;
 `;
 
 const GlassCard = styled.div`
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  padding: 40px 30px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 40px 20px;
   box-sizing: border-box;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.7);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(79, 70, 229, 0.1);
+    background: rgba(255, 255, 255, 0.9);
   }
 `;
 
@@ -197,8 +226,7 @@ const IconWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
-  background: rgba(127, 86, 218, 0.1);
 `;

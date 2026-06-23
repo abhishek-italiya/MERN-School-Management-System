@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { getAllSclasses, getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
@@ -15,6 +16,22 @@ import SchoolIcon from '@mui/icons-material/School';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import ReportIcon from '@mui/icons-material/Report';
+
+const feeCollectionTrend = [
+    { name: 'Jan', collected: 15000, pending: 2400 },
+    { name: 'Feb', collected: 22000, pending: 1398 },
+    { name: 'Mar', collected: 18000, pending: 2000 },
+    { name: 'Apr', collected: 27000, pending: 3908 },
+    { name: 'May', collected: 32000, pending: 4800 },
+    { name: 'Jun', collected: 35000, pending: 3800 },
+];
+
+const classStrengthData = [
+    { name: 'Class 9', students: 42 },
+    { name: 'Class 10', students: 55 },
+    { name: 'Class 11', students: 38 },
+    { name: 'Class 12', students: 60 },
+];
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
@@ -176,6 +193,47 @@ const AdminHomePage = () => {
                             <Data start={0} end={numberOfComplains} duration={2.5} />
                         </Box>
                     </StatCard>
+                </Grid>
+
+                {/* Analytical Charts */}
+                <Grid item xs={12} md={6}>
+                    <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', borderRadius: 4, height: 360, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
+                        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', fontFamily: 'Poppins', color: '#2c2143' }}>
+                            Fee Collection Trend (Monthly)
+                        </Typography>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={feeCollectionTrend}>
+                                <defs>
+                                    <linearGradient id="colorCollected" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.4}/>
+                                        <stop offset="95%" stopColor="#4F46E5" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Area type="monotone" dataKey="collected" stroke="#4F46E5" fillOpacity={1} fill="url(#colorCollected)" strokeWidth={3} />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </Paper>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                    <Paper sx={{ p: 3, display: 'flex', flexDirection: 'column', borderRadius: 4, height: 360, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', border: '1px solid #eee' }}>
+                        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold', fontFamily: 'Poppins', color: '#2c2143' }}>
+                            Student Strength by Class
+                        </Typography>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={classStrengthData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <Tooltip />
+                                <Bar dataKey="students" fill="#7C3AED" radius={[8, 8, 0, 0]} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Paper>
                 </Grid>
 
                 {/* Notices List */}

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const Student = require('../models/studentSchema.js');
 const Subject = require('../models/subjectSchema.js');
 
@@ -26,7 +27,12 @@ const studentRegister = async (req, res) => {
             let result = await student.save();
 
             result.password = undefined;
-            res.send(result);
+            const token = jwt.sign(
+                { id: result._id, role: 'Student', school: result.school },
+                process.env.JWT_SECRET || 'fallback_secret',
+                { expiresIn: '24h' }
+            );
+            res.send({ user: result, token });
         }
     } catch (err) {
         res.status(500).json(err);
@@ -44,7 +50,12 @@ const studentLogIn = async (req, res) => {
                 student.password = undefined;
                 student.examResult = undefined;
                 student.attendance = undefined;
-                res.send(student);
+                const token = jwt.sign(
+                    { id: student._id, role: 'Student', school: student.school?._id || student.school },
+                    process.env.JWT_SECRET || 'fallback_secret',
+                    { expiresIn: '24h' }
+                );
+                res.send({ user: student, token });
             } else {
                 res.send({ message: "Invalid password" });
             }
@@ -130,7 +141,7 @@ const updateStudent = async (req, res) => {
     try {
         if (req.body.password) {
             const salt = await bcrypt.genSalt(10)
-            res.body.password = await bcrypt.hash(res.body.password, salt)
+            req.body.password = await bcrypt.hash(req.body.password, salt)
         }
         let result = await Student.findByIdAndUpdate(req.params.id,
             { $set: req.body },

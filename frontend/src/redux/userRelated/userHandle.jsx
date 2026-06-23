@@ -19,10 +19,17 @@ export const loginUser = (fields, role) => async (dispatch) => {
         const result = await axios.post(`${import.meta.env.VITE_BASE_URL}/${role}Login`, fields, {
             headers: { 'Content-Type': 'application/json' },
         });
-        if (result.data.role) {
-            dispatch(authSuccess(result.data));
+        
+        const data = result.data;
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+            const userData = { ...data.user, token: data.token };
+            dispatch(authSuccess(userData));
+        } else if (data.role) {
+            dispatch(authSuccess(data));
         } else {
-            dispatch(authFailed(result.data.message));
+            dispatch(authFailed(data.message));
         }
     } catch (error) {
         dispatch(authError(error));
@@ -36,14 +43,21 @@ export const registerUser = (fields, role) => async (dispatch) => {
         const result = await axios.post(`${import.meta.env.VITE_BASE_URL}/${role}Reg`, fields, {
             headers: { 'Content-Type': 'application/json' },
         });
-        if (result.data.schoolName) {
-            dispatch(authSuccess(result.data));
+        
+        const data = result.data;
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+            const userData = { ...data.user, token: data.token };
+            dispatch(authSuccess(userData));
+        } else if (data.schoolName) {
+            dispatch(authSuccess(data));
         }
-        else if (result.data.school) {
+        else if (data.school) {
             dispatch(stuffAdded());
         }
         else {
-            dispatch(authFailed(result.data.message));
+            dispatch(authFailed(data.message));
         }
     } catch (error) {
         dispatch(authError(error));
@@ -51,6 +65,8 @@ export const registerUser = (fields, role) => async (dispatch) => {
 };
 
 export const logoutUser = () => (dispatch) => {
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
     dispatch(authLogout());
 };
 
